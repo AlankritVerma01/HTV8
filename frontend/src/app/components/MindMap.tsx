@@ -39,16 +39,15 @@ function transformData(data: RawData, rootKey: string="1", layer = 1): TreeNode 
   }
 
 type MindMapProps = {
-    data: NodeData;
+  data: NodeData;
 };
 type PositionedNode = d3.HierarchyNode<TransformedNode> & {
-    x: number;
-    y: number;
+  x: number;
+  y: number;
 };
 
-
 const MindMap: React.FC<MindMapProps> = ({ data }) => {
-    const containerRef = useRef(null);
+  const containerRef = useRef(null);
 
     useEffect(() => {
 
@@ -149,7 +148,20 @@ const MindMap: React.FC<MindMapProps> = ({ data }) => {
          renderGraph(transformedData); 
     }, [data]);
 
-    return <div ref={containerRef}></div>;
-}
+    // Add labels
+    svg
+      .selectAll(".label")
+      .data(root.descendants())
+      .enter()
+      .append("text")
+      .classed("label", true)
+      .attr("x", (d) => (d as PositionedNode).x)
+      .attr("y", (d) => (d as PositionedNode).y)
+      .attr("dy", -10)
+      .text((d) => d.data.name);
+  }, [data]);
+
+  return <div ref={containerRef}></div>;
+};
 
 export default MindMap;

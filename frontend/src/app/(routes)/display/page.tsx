@@ -6,7 +6,7 @@ import data from "../../data/data.json";
 const TestPage: React.FC = () => {
   return (
     <div>
-      <h1>Your Page Title</h1>
+      <h1 className="display-none">Your Page Title</h1>
       <MindMap data={data as NodeData} />
     </div>
   );
