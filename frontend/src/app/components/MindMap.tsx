@@ -1,27 +1,43 @@
 // components/MindMap.tsx
-
+"use client";
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
-import { NodeData, TransformedNode } from '../types';
+import { NodeData, TransformedNode } from '../types/mindmapTypes';
+import 'MindMap.module.css';
 
-function transformData(node: NodeData): TransformedNode {
-    const children = [];
 
-    if (node.subtopics) {
-        for (const subtopic of node.subtopics) {
-            children.push(transformData(subtopic));
-        }
-    } else if (node.details) {
-        for (const detail of node.details) {
-            children.push({ name: detail });
-        }
-    }
-
-    return {
-        name: node.title,
-        children: children.length > 0 ? children : null
+// Definations - 
+type RawData = {
+    [key: string]: {
+      title: string;
+      subtopics: Array<{ $numberInt: string }>;
     };
-}
+  };
+  
+  type TreeNode = {
+    title: string;
+    children?: TreeNode[];
+    type?: string;
+    visible: boolean;
+};
+  
+
+// Function to transform the data
+function transformData(data: RawData, rootKey: string, layer = 1): TreeNode {
+    const node = data[rootKey];
+    let children = [];
+  
+    for (const subtopic of node.subtopics) {
+        children.push(transformData(data, subtopic.$numberInt, layer + 1));
+    }
+  
+    return {
+        title: node.title,
+        children: children.length > 0 ? children : undefined,
+        type: "someType",
+        visible: layer === 1
+    };
+  }
 
 type MindMapProps = {
     data: NodeData;

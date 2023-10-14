@@ -1,5 +1,6 @@
+"use client";
 import MindMap from "../../components/MindMap";
-import { NodeData } from "../../types";
+import { NodeData } from "../../types/mindmapTypes";
 import data from "../../data/data.json";
 
 const TestPage: React.FC = () => {

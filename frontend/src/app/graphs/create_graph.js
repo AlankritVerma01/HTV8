@@ -65,3 +65,29 @@ svg.selectAll('.label')
     .attr('y', d => d.y)
     .attr('dy', -10)
     .text(d => d.data.name);
+// ---------
+function renderGraph(root: TreeNode) {
+    const rootNode = d3.hierarchy(root);
+    treeLayout(rootNode);
+  
+    const links = svg.selectAll(".link")
+      .data(rootNode.links())
+      .enter()
+      .append("path")
+      .attr("class", "link")
+      .attr("d", d3.linkVertical()
+        .x(d => d.x)
+        .y(d => d.y));
+  
+    const nodes = svg.selectAll(".node")
+      .data(rootNode.descendants())
+      .enter()
+      .append("circle")
+      .attr("class", "node")
+      .attr("cx", d => d.x)
+      .attr("cy", d => d.y)
+      .attr("r", 10);
+  
+    // ... (continue with labels and other visual elements)
+  }
+  
