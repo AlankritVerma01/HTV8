@@ -1,0 +1,62 @@
+{
+    "title": "Human Cell",
+    "subtopics": [
+        {
+            "title": "Introduction",
+            "details": [
+                "Basic unit of life",
+                "Trillions in the human body"
+            ]
+        },
+        {
+            "title": "Types of Cells",
+            "subtopics": [
+                {
+                    "title": "Prokaryotic",
+                    "details": ["No nucleus", "Example: Bacteria"]
+                },
+                {
+                    "title": "Eukaryotic",
+                    "details": ["Has nucleus", "Found in humans and most organisms"]
+                }
+            ]
+        },
+        {
+            "title": "Cell Structure",
+            "subtopics": [
+                {
+                    "title": "Cell Membrane",
+                    "details": [
+                        "Semipermeable barrier",
+                        "Phospholipid bilayer"
+                    ]
+                },
+                {
+                    "title": "Cytoplasm",
+                    "details": ["Gel-like substance", "Holds organelles"]
+                },
+                {
+                    "title": "Nucleus",
+                    "details": ["Control center", "Contains DNA"]
+                }
+            ]
+        },
+        {
+            "title": "Cell Functions",
+            "subtopics": [
+                {
+                    "title": "Reproduction",
+                    "details": ["Mitosis", "Meiosis"]
+                },
+                {
+                    "title": "Energy Production",
+                    "details": ["Cellular respiration", "ATP synthesis"]
+                },
+                {
+                    "title": "Protein Synthesis",
+                    "details": ["Transcription", "Translation"]
+                }
+            ]
+        }
+    ]
+}
