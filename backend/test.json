@@ -1,0 +1,130 @@
+{
+  "_id": {
+    "$oid": "652acef401c32f764d420d50"
+  },
+  "id": "1",
+  "title": "Biology Knowledge Base",
+  "description": "A structured knowledge base that outlines various aspects of biology, focusing on the human cell.",
+  "nodes": [
+    {
+      "1": {
+        "title": "Human Cell",
+        "description": "Description about Human Cell",
+        "subtopics": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "color": "#0000FF"
+      }
+    },
+    {
+      "2": {
+        "title": "Introduction",
+        "description": "Description about Introduction",
+        "subtopics": [],
+        "color": "#3333FF"
+      }
+    },
+    {
+      "3": {
+        "title": "Types of Cells",
+        "description": "Description about Types of Cells",
+        "subtopics": [
+          6,
+          7
+        ],
+        "color": "#3333FF"
+      }
+    },
+    {
+      "4": {
+        "title": "Cell Structure",
+        "description": "Description about Cell Structure",
+        "subtopics": [
+          8,
+          9,
+          10
+        ],
+        "color": "#3333FF"
+      }
+    },
+    {
+      "5": {
+        "title": "Cell Functions",
+        "description": "Description about Cell Functions",
+        "subtopics": [
+          11,
+          12,
+          13
+        ],
+        "color": "#3333FF"
+      }
+    },
+    {
+      "6": {
+        "title": "Prokaryotic",
+        "description": "Description about Prokaryotic",
+        "subtopics": [],
+        "color": "#6666FF"
+      }
+    },
+    {
+      "7": {
+        "title": "Eukaryotic",
+        "description": "Description about Eukaryotic",
+        "subtopics": [],
+        "color": "#6666FF"
+      }
+    },
+    {
+      "8": {
+        "title": "Cell Membrane",
+        "description": "Description about Cell Membrane",
+        "subtopics": [],
+        "color": "#6666FF"
+      }
+    },
+    {
+      "9": {
+        "title": "Cytoplasm",
+        "description": "Description about Cytoplasm",
+        "subtopics": [],
+        "color": "#6666FF"
+      }
+    },
+    {
+      "10": {
+        "title": "Nucleus",
+        "description": "Description about Nucleus",
+        "subtopics": [],
+        "color": "#6666FF"
+      }
+    },
+    {
+      "11": {
+        "title": "Reproduction",
+        "description": "Description about Reproduction",
+        "subtopics": [],
+        "color": "#6666FF"
+      }
+    },
+    {
+      "12": {
+        "title": "Energy Production",
+        "description": "Description about Energy Production",
+        "subtopics": [],
+        "color": "#6666FF"
+      }
+    },
+    {
+      "13": {
+        "title": "Protein Synthesis",
+        "description": "Description about Protein Synthesis",
+        "subtopics": [],
+        "color": "#6666FF"
+      }
+    }
+  ]
+}
