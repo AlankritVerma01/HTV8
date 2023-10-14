@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import { NodeData, TransformedNode } from '../types/mindmapTypes';
-import 'MindMap.module.css';
+import styles from 'MindMap.module.css';
 
 
 // Definations - 
@@ -14,16 +14,15 @@ type RawData = {
     };
   };
   
-  type TreeNode = {
+type TreeNode = {
     title: string;
     children?: TreeNode[];
     type?: string;
     visible: boolean;
-};
-  
+}; 
 
 // Function to transform the data
-function transformData(data: RawData, rootKey: string, layer = 1): TreeNode {
+function transformData(data: RawData, rootKey: string="1", layer = 1): TreeNode {
     const node = data[rootKey];
     let children = [];
   
@@ -52,48 +51,102 @@ const MindMap: React.FC<MindMapProps> = ({ data }) => {
     const containerRef = useRef(null);
 
     useEffect(() => {
-        const transformedData = transformData(data);
-    
-        const svg = d3.select(containerRef.current).append("svg")
-            .attr("width", 800)
-            .attr("height", 600);
-    
-        const root = d3.hierarchy(transformedData) as d3.HierarchyNode<TransformedNode>;
-        const treeLayout = d3.tree<TransformedNode>().size([800, 600]);
-        treeLayout(root);
 
-        // Add links (edges) between nodes
-        svg.selectAll('.link')
-            .data(root.links())
-            .enter()
-            .append('line')
-            .classed('link', true)
-            .attr('x1', d => (d.source as PositionedNode).x)
-            .attr('y1', d => (d.source as PositionedNode).y)
-            .attr('x2', d => (d.target as PositionedNode).x)
-            .attr('y2', d => (d.target as PositionedNode).y);
+        // Initialize the graph 
+        const width = 800;
+        const height = 600;
 
-        // Add nodes
-        svg.selectAll('.node')
-            .data(root.descendants())
-            .enter()
-            .append('circle')
-            .classed('node', true)
-            .attr('cx', d => (d as PositionedNode).x)
-            .attr('cy', d => (d as PositionedNode).y)
-            .attr('r', 5);
+        const svg = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height);
 
+        svg.append("defs").append("marker")
+            .attr("id", "arrow")
+            .attr("viewBox", "0 -5 10 10")
+            .attr("refX", 10)
+            .attr("refY", 0)
+            .attr("markerWidth", 5)
+            .attr("markerHeight", 5)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("d", "M0,-5L10,0L0,5")
+            .attr("fill", "#666");
 
-        // Add labels
-        svg.selectAll('.label')
-            .data(root.descendants())
-            .enter()
-            .append('text')
-            .classed('label', true)
-            .attr('x', d => (d as PositionedNode).x)
-            .attr('y', d => (d as PositionedNode).y)
-            .attr('dy', -10)
-            .text(d => d.data.name);
+        const treeLayout = d3.tree<TreeNode>().size([width, height]);
+        // Render the graph
+        function renderGraph(root: TreeNode) {
+            svg.selectAll("*").remove();
+          
+            const rootNode = d3.hierarchy(root) as d3.HierarchyNode<TreeNode>;
+            treeLayout(rootNode);
+          
+            const links = svg.selectAll(".link")
+                .data(rootNode.links().filter(link => link.source.data.visible && link.target.data.visible))
+                .enter()
+                .append("path")
+                .attr("class", "link")
+                .attr("marker-end", "url(#arrow)")
+                .attr("d", d => {
+                  const source = d.source as d3.HierarchyPointNode<TreeNode>;
+                  const target = d.target as d3.HierarchyPointNode<TreeNode>;
+                  return d3.linkVertical()({
+                      source: [source.x, source.y],
+                      target: [target.x, target.y]
+                  });
+              });
+          
+            const nodeGroups = svg.selectAll(".node-group")
+                .data(rootNode.descendants().filter(node => node.data.visible))
+                .enter()
+                .append("g")
+                .attr("class", "node-group")
+                .attr("transform", d => {
+                    const pointNode = d as d3.HierarchyPointNode<TreeNode>;
+                    return `translate(${pointNode.x}, ${pointNode.y})`;
+                });
+          
+            nodeGroups.append("circle")
+                .attr("class", "node")
+                .attr("r", 10)
+                .attr("fill", d => {
+                    switch (d.data.type) {
+                        case "type1": return "red";
+                        case "type2": return "blue";
+                        default: return "gray";
+                    }
+                });
+          
+            nodeGroups.filter((d: d3.HierarchyNode<TreeNode>) => !!d.children && d.children.length > 0)
+                .append("circle")
+                .attr("class", "expand-collapse-button")
+                .attr("r", 5)
+                .attr("cy", 15)
+                .attr("fill", "white")
+                .attr("stroke", "black")
+                .on("click", toggleChildrenVisibility);
+          
+          
+            nodeGroups.append("text")
+                .attr("class", "node-label")
+                .attr("dy", 5)
+                .attr("dx", 15)
+                .text(d => d.data.title);
+          }
+
+        // Toggle the visibility of children
+        function toggleChildrenVisibility(d: d3.HierarchyNode<TreeNode>) {
+            if (d.children) {
+                d.children.forEach((child: d3.HierarchyNode<TreeNode>) => {
+                    child.data.visible = !child.data.visible;
+                });
+            }
+            renderGraph(transformedRoot);
+          }
+        
+
+         // Main calling functions
+         const transformedData = transformData(data,1);
+         renderGraph(transformedData); 
     }, [data]);
 
     return <div ref={containerRef}></div>;
