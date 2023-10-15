@@ -23,7 +23,6 @@ type MindMapProps = {
 import { GraphCanvas } from "reagraph";
 import { TextField } from "@mui/material";
 const MindMap: React.FC<MindMapProps> = ({ data }) => {
-  
   const [question, setQuestion] = useState("");
   const [qDisplay, setQDisplay] = useState("");
   const [answer, setAnswer] = useState(
@@ -35,7 +34,7 @@ const MindMap: React.FC<MindMapProps> = ({ data }) => {
     axios
       .post(
         `http://127.0.0.1:5000/question`,
-        { question: question },
+        { question: question, id: activeId },
         {
           headers: {
             "Content-Type": "application/json",
@@ -53,10 +52,12 @@ const MindMap: React.FC<MindMapProps> = ({ data }) => {
       });
   };
 
-<<<<<<< Updated upstream
-  const initialCollapsed = Object.keys(data).filter(key => data[key].depth >= 1);
+  const [activeId, setActiveId] = useState("");
+
+  const initialCollapsed = Object.keys(data).filter(
+    (key) => data[key].depth >= 1
+  );
   let [collapsed, setCollapsed] = useState(initialCollapsed);
-=======
   useEffect(() => {
     if (isTypingEffect) {
       setTimeout(() => setIsTypingEffect(false), 3000); // Adjust the duration to match your animation time
@@ -70,8 +71,6 @@ const MindMap: React.FC<MindMapProps> = ({ data }) => {
     }
   };
 
-  const [collapsed, setCollapsed] = useState([]);
->>>>>>> Stashed changes
   interface Node {
     id: string;
     label: string;
@@ -174,7 +173,7 @@ const MindMap: React.FC<MindMapProps> = ({ data }) => {
           nodes={nodes}
           edges={links}
           onNodeClick={(node) => {
-            
+            setActiveId(node.id);
             if (collapsed.includes(node.id)) {
               setCollapsed(collapsed.filter((id) => id !== node.id));
             } else {
