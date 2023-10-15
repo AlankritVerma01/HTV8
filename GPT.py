@@ -4,7 +4,7 @@ import summarizer
 
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 COLORS = ['#0d6c6c', '#139f9f', '#16c9c9', '#30e9e9', '#73f0f0']
-SIZES = [1, 20, 40, 50, 60]
+SIZES = [60, 50, 40, 20, 10]
 
 
 class SectionNode:
