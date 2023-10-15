@@ -52,6 +52,8 @@ const MindMap: React.FC<MindMapProps> = ({ data }) => {
       });
   };
 
+
+
   const [activeId, setActiveId] = useState("");
 
   const initialCollapsed = Object.keys(data).filter(
@@ -66,7 +68,7 @@ const MindMap: React.FC<MindMapProps> = ({ data }) => {
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      setQDisplay(question);
+      setQDisplay("Question: " + question);
       handleButtonClick();
     }
   };
@@ -77,6 +79,7 @@ const MindMap: React.FC<MindMapProps> = ({ data }) => {
     color?: string;
     size?: number;
     depth: number;
+    text?: string;
   }
 
   interface Link {
@@ -97,6 +100,7 @@ const MindMap: React.FC<MindMapProps> = ({ data }) => {
       label: data[key].title,
       fill: data[key].color,
       size: data[key].size,
+      text: data[key].text,
     });
     for (let subtopic of data[key].children) {
       links.push({
@@ -108,17 +112,10 @@ const MindMap: React.FC<MindMapProps> = ({ data }) => {
     }
   }
 
-  let listpoints = [
-    "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
-    "klsdjflksjdfk;ljsdf",
-    "flksjdkfjsdlfjsdlkfkldsfjdf",
-    "ksdjlksdjfsldkfjslk;dfds",
-    "klsdjflksjdfk;ljsdf",
-    "flksjdkfjsdlfjsdlkfkldsfjdf",
-    "ksdjlksdjfsldkfjslk;dfds",
-    "klsdjflksjdfk;ljsdf",
-    "flksjdkfjsdlfjsdlkfkldsfjdf",
-  ];
+  const [listpoints, setListpoints] = useState([
+    // ... (Other initial points)
+  ]);
+
 
   return (
     <div className="absolute top-0 bottom-0 left-0 right-0 w-[55%]">
@@ -157,10 +154,10 @@ const MindMap: React.FC<MindMapProps> = ({ data }) => {
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
               onKeyDown={handleKeyPress}
-              className="font-poppins w-full h-[2.3rem] p-2 rounded-lg text-black bg-transparent"
+              className="font-poppins w-full h-[2.3rem] p-2 rounded-lg text-white bg-transparent"
             />
           </div>
-          <p className="font-poppins">{qDisplay}</p>
+          <p className="font-poppins mt-6">{qDisplay}</p>
         </div>
       </div>
       <div
@@ -176,6 +173,10 @@ const MindMap: React.FC<MindMapProps> = ({ data }) => {
             setActiveId(node.id);
             if (collapsed.includes(node.id)) {
               setCollapsed(collapsed.filter((id) => id !== node.id));
+              if (node.text) {
+                const newPoints = node.text.split('\n-');
+                setListpoints(newPoints);
+              }
             } else {
               setCollapsed([...collapsed, node.id]);
               console.log(node.id);
