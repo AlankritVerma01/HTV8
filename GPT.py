@@ -3,6 +3,8 @@ from dotenv import load_dotenv; load_dotenv()
 import summarizer
 
 openai.api_key = os.environ.get("OPENAI_API_KEY")
+COLORS = ['#0d6c6c', '#139f9f', '#16c9c9', '#30e9e9', '#73f0f0']
+SIZES = [1, 20, 40, 50, 60]
 
 
 class SectionNode:
@@ -15,6 +17,8 @@ class SectionNode:
         self.page = page
         self.top = top
         self.depth = None
+        self.color = None
+        self.size = None
 
     def addChild(self, other):
         self.children.append(other)
@@ -48,6 +52,7 @@ def get_bookmark(root, outline):
 def get_json_output(json_output, root):
     json_output[root.id] = {}
     json_output[root.id]["depth"] = root.depth
+    json_output[root.id]["color"] = root.color
     json_output[root.id]["page"] = root.page
     json_output[root.id]["top"] = root.top
     json_output[root.id]["title"] = root.title
@@ -151,6 +156,16 @@ def get_depth(root, depth):
         get_depth(child, depth + 1)
 
 
+def get_all_colors(all_nodes):
+    for node in all_nodes:
+        node.color = COLORS[node.depth]
+
+
+def get_all_size(all_nodes):
+    for node in all_nodes:
+        node.size = SIZES[node.depth]
+
+
 def user_said(content, history):
     history.append({"role": "user", "content": content})
 
@@ -196,6 +211,8 @@ def main(opened_pdf):
     get_depth(root, 0)
     adjust_page_numbers(pdf_reader, all_nodes)
     get_text_all_nodes(pdf_reader, all_nodes)
+    get_all_colors(all_nodes)
+    get_all_size(all_nodes)
     # float2string(all_nodes)
 
     section_texts = [node.text for node in all_nodes]
