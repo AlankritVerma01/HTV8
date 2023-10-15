@@ -1,10 +1,6 @@
-import os, requests, json, openai, PyPDF2, pdfplumber, re, tiktoken, asyncio, aiohttp
-from dotenv import load_dotenv;
+import os, openai, PyPDF2, asyncio, aiohttp
+from dotenv import load_dotenv; load_dotenv()
 import summarizer
-
-load_dotenv()
-from io import BytesIO
-from pdfminer.high_level import extract_text
 
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 
