@@ -52,6 +52,7 @@ def get_bookmark(root, outline):
 def get_json_output(json_output, root):
     json_output[root.id] = {}
     json_output[root.id]["depth"] = root.depth
+    json_output[root.id]["size"] = root.size
     json_output[root.id]["color"] = root.color
     json_output[root.id]["page"] = root.page
     json_output[root.id]["top"] = root.top
