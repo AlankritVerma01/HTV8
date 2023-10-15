@@ -17,7 +17,7 @@ def askGPT():
         question = data['question']
         id = data['id']
         context = ""
-        if len(current_nodes != 0):
+        if len(current_nodes) != 0:
           context = current_nodes[id]["text"]
         return gpt.answer_question(context, question)
 
@@ -50,7 +50,7 @@ def upload():
                     {"id": str(id), "title": articleTitle, "text": articleText, "nodes": nodeDict}).get_json()
                 db.insertMongo(result_json)
                 result_json = dumps(result_json)
-            with open("./frontend/src/app/data/trial.json", "w") as file:
+            with open("../frontend/src/app/data/trial.json", "w") as file:
                 file.write(result_json)
     return {"Status": "Success"}
 
