@@ -34,7 +34,6 @@ class SectionNode:
 def create_graph(pdf_reader, title, page):
     root = SectionNode(title, page, None)
     get_bookmark(root, pdf_reader.outline)
-
     return root
 
 
@@ -217,10 +216,10 @@ def main(opened_pdf):
     # float2string(all_nodes)
 
     section_texts = [node.text for node in all_nodes]
-    summarized_texts = asyncio.run(summarizer.main(section_texts))
+    summarized_texts = asyncio.run(summarizer.main(section_texts[1:]))
 
     for i, each_summary in enumerate(summarized_texts):
-        all_nodes[i].text = each_summary
+        all_nodes[i+1].text = each_summary
 
     get_json_output(json_output, root)
     return json_output
