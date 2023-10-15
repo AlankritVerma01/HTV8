@@ -7,21 +7,19 @@ from bson.json_util import dumps
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
-
-
-# @app.route('/', methods=['GET', 'POST'])
-# def hello():
-#     return 'Hello, World!'
-
-# def colour_assigner():
+current_nodes = {}
 
 
 @app.route('/question', methods=['POST'])
 def askGPT():
     if request.method == 'POST':
         data = request.json
-        text_received = data['question']
-        return text_received
+        question = data['question']
+        id = data['id']
+        context = ""
+        if len(current_nodes != 0):
+          context = current_nodes[id]["text"]
+        return gpt.answer_question(context, question)
 
 
 @app.route('/upload', methods=['POST'])
@@ -47,6 +45,7 @@ def upload():
             articleText = nodeDict[first_id]["text"]
             id = int(db.currentIndex()) + 1
             if len(db.queryMongo(id)) == 0:
+                current_nodes = nodeDict
                 result_json = jsonify(
                     {"id": str(id), "title": articleTitle, "text": articleText, "nodes": nodeDict}).get_json()
                 db.insertMongo(result_json)
