@@ -1,5 +1,5 @@
 # Paper:Vision
-**Transform articles into interactive mind maps, aiding comprehension and engagement!<br>Ideal for readers with ADHD.**
+### Transform articles into interactive mind maps, aiding comprehension and engagement!<br>Ideal for readers with ADHD.
 
 [Hack The Valley 8 - Fall 2023 - Devpost]()
 
