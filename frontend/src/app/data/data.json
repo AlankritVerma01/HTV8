@@ -1,1 +1,91 @@
-{"1":{"title":"Human Cell","subtopics":[{"$numberInt":"2"},{"$numberInt":"3"},{"$numberInt":"4"},{"$numberInt":"5"}],"desc":"A cell"},"2":{"title":"Introduction","subtopics":[],"desc":"An Introduction"},"3":{"title":"Types of Cells","subtopics":[{"$numberInt":"6"},{"$numberInt":"7"}],"desc":"Types"},"4":{"title":"Cell Structure","subtopics":[{"$numberInt":"8"},{"$numberInt":"9"},{"$numberInt":"10"}],"desc":"Structure"},"5":{"title":"Cell Functions","subtopics":[{"$numberInt":"11"},{"$numberInt":"12"},{"$numberInt":"13"}],"desc":"Functions"},"6":{"title":"Prokaryotic","subtopics":[],"desc":"type1"},"7":{"title":"Eukaryotic","subtopics":[],"desc":"type2"},"8":{"title":"Cell Membrane","subtopics":[],"desc":"Component1"},"9":{"title":"Cytoplasm","subtopics":[],"desc":"Component2"},"10":{"title":"Nucleus","subtopics":[]},"11":{"title":"Reproduction","subtopics":[],"desc":"Function1"},"12":{"title":"Energy Production","subtopics":[],"desc":"Function2"},"13":{"title":"Protein Synthesis","subtopics":[],"desc":"Function3"},"_id":{"$oid":"652a357e8c7cc40135224b92"}}
+
+{"_id": {
+    "$oid": "652acef401c32f764d420d50"
+ },
+ "id": "1",
+ "title": "Biology Knowledge Base",
+ "description": "A structured knowledge base that outlines various aspects of biology, focusing on the human cell.",
+ "nodes": {
+    "1": {
+       "title": "Human Cell",
+       "subtopics": [
+          "2",
+          "3",
+          "4",
+          "5"
+       ],
+       "color": "#0000FF"
+    },
+    "2": {
+       "title": "Introduction",
+       "subtopics": [],
+       "color": "#3333FF"
+    },
+    "3": {
+       "title": "Types of Cells",
+       "subtopics": [
+          "6",
+          "7"
+       ],
+       "color": "#3333FF"
+    },
+    "4": {
+       "title": "Cell Structure",
+       "subtopics": [
+          "8",
+          "9",
+          "10"
+       ],
+       "color": "#3333FF"
+    },
+    "5": {
+       "title": "Cell Functions",
+       "subtopics": [
+          "11",
+          "12",
+          "13"
+       ],
+       "color": "#3333FF"
+    },
+    "6": {
+       "title": "Prokaryotic",
+       "subtopics": [],
+       "color": "#6666FF"
+    },
+    "7": {
+       "title": "Eukaryotic",
+       "subtopics": [],
+       "color": "#6666FF"
+    },
+    "8": {
+       "title": "Cell Membrane",
+       "subtopics": [],
+       "color": "#6666FF"
+    },
+    "9": {
+       "title": "Cytoplasm",
+       "subtopics": [],
+       "color": "#6666FF"
+    },
+    "10": {
+       "title": "Nucleus",
+       "subtopics": [],
+       "color": "#6666FF"
+    },
+    "11": {
+       "title": "Reproduction",
+       "subtopics": [],
+       "color": "#6666FF"
+    },
+    "12": {
+       "title": "Energy Production",
+       "subtopics": [],
+       "color": "#6666FF"
+    },
+    "13": {
+       "title": "Protein Synthesis",
+       "subtopics": [],
+       "color": "#6666FF"
+    }
+ }
+}

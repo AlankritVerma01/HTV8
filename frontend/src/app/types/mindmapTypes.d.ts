@@ -2,11 +2,12 @@
 
 export type NodeData = {
     title: string;
-    subtopics?: NodeData[];
-    details?: string[];
+    color: string;
+    subtopics?: Array<{ $numberInt: string }> | null; // If you transform data before using it, this can be simplified
 };
 
-export type TransformedNode = {
-    name: string;
-    children?: TransformedNode[] | null;
+export type TreeNode = {
+    title: string;
+    color: string;
+    children?: TreeNode[] | null;
 };
