@@ -21,9 +21,16 @@ type MindMapProps = {
 };
 
 import { GraphCanvas } from "reagraph";
+import { TextField } from "@mui/material";
 const MindMap: React.FC<MindMapProps> = ({ data }) => {
   
   const [question, setQuestion] = useState("");
+  const [qDisplay, setQDisplay] = useState("");
+  const [answer, setAnswer] = useState(
+    "Your answer will appear here after you ask questions in the chatbox..."
+  );
+  const [isTypingEffect, setIsTypingEffect] = useState(false);
+
   const handleButtonClick = () => {
     axios
       .post(
@@ -37,15 +44,34 @@ const MindMap: React.FC<MindMapProps> = ({ data }) => {
         }
       )
       .then((response) => {
-        console.log("Response from Flask:", response.data);
+        setIsTypingEffect(true); // Enable the typewriter effect
+        setAnswer(response.data.answer);
+        setQuestion("");
       })
       .catch((error) => {
         console.error("Error:", error);
       });
   };
 
+<<<<<<< Updated upstream
   const initialCollapsed = Object.keys(data).filter(key => data[key].depth >= 1);
   let [collapsed, setCollapsed] = useState(initialCollapsed);
+=======
+  useEffect(() => {
+    if (isTypingEffect) {
+      setTimeout(() => setIsTypingEffect(false), 3000); // Adjust the duration to match your animation time
+    }
+  }, [isTypingEffect]);
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      setQDisplay(question);
+      handleButtonClick();
+    }
+  };
+
+  const [collapsed, setCollapsed] = useState([]);
+>>>>>>> Stashed changes
   interface Node {
     id: string;
     label: string;
@@ -84,7 +110,7 @@ const MindMap: React.FC<MindMapProps> = ({ data }) => {
   }
 
   let listpoints = [
-    "ksdjlksdjfsldkfjslk;dfds",
+    "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
     "klsdjflksjdfk;ljsdf",
     "flksjdkfjsdlfjsdlkfkldsfjdf",
     "ksdjlksdjfsldkfjslk;dfds",
@@ -96,46 +122,47 @@ const MindMap: React.FC<MindMapProps> = ({ data }) => {
   ];
 
   return (
-    <div className="absolute top-0 bottom-0 left-0 right-0 w-[70%]">
+    <div className="absolute top-0 bottom-0 left-0 right-0 w-[55%]">
       <div
-        className="absolute z-9 p-8 flex flex-col items-center items-between"
+        className="absolute z-9 p-8 flex flex-col items-center w-full"
         style={{
           zIndex: 9,
           position: "fixed",
           height: "100vh",
-          width: "30rem",
+          width: "45rem",
           right: 0,
           background: "rgba(0, 0, 0, .5)",
           color: "white",
         }}
       >
-        <div>
-          <h3 className="font-poppins font-bold text-3xl w-full m-auto">
-            Summary
-          </h3>
-          <div className="w-full">
+        <div className="w-full mb-10">
+          <h3 className="font-poppins font-bold text-3xl mb-4">Summary:</h3>
+          <div className="w-full h-72 overflow-y-auto border-white border-2 rounded-md p-4">
             <ul>
               {listpoints.map((point) => (
-                <li className="font-poppins text-xl relative z-1">
+                <li className="font-poppins text-lg relative z-1">
                   &bull; {point}
                 </li>
               ))}
             </ul>
           </div>
         </div>
-        <h3>Chat Assistant</h3>
-        <TextareaAutosize
-          aria-label="empty textarea"
-          placeholder="Enter any questions"
-          minRows={1}
-          maxRows={5}
-          value={question} // Set the value of the textarea to the state
-          onChange={(e) => setQuestion(e.target.value)}
-          style={{ width: "100%", color: "black" }} // Set the width
-        />
-        <Button variant="contained" color="primary" onClick={handleButtonClick}>
-          Get Text
-        </Button>
+        <div className="w-full">
+          <h3 className="font-poppins font-bold text-3xl">Chat Assistant</h3>
+          <div className="w-full h-56 mb-4 border-white border-2 rounded-md p-4 font-poppins">
+            {answer}
+          </div>
+          <div className="w-full">
+            <TextField
+              type="text"
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+              onKeyDown={handleKeyPress}
+              className="font-poppins w-full h-[2.3rem] p-2 rounded-lg text-black bg-transparent"
+            />
+          </div>
+          <p className="font-poppins">{qDisplay}</p>
+        </div>
       </div>
       <div
         style={{
