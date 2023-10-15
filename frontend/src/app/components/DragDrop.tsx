@@ -2,6 +2,7 @@
 import React, { useCallback, useState, FormEvent } from "react";
 import axios from "axios";
 import { useDropzone } from "react-dropzone";
+import { Document, Page } from "react-pdf";
 
 const DragDrop = () => {
   // form submit function
@@ -37,16 +38,27 @@ const DragDrop = () => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
-    <main>
-      <form onSubmit={onSubmit}>
-        <div {...getRootProps()} className="">
+    <main className="w-full h-[80vh] flex flex-col items-center">
+      <form
+        onSubmit={onSubmit}
+        className="h-full flex flex-col items-center w-full"
+      >
+        <div
+          {...getRootProps()}
+          className="border-2 w-[45%] h-full flex justify-center items-center"
+        >
           <input {...getInputProps()} />
           {isDragActive ? (
-            <p>Release</p>
+            <p className="font-poppins text-xl">Release</p>
           ) : file ? (
-            <p>{file.name}</p>
+            <iframe
+              src={URL.createObjectURL(file)}
+              title={file.name}
+              width="100%"
+              height="100%"
+            />
           ) : (
-            <p>Upload your PDF</p>
+            <p className="font-poppins text-xl">Upload your PDF</p>
           )}
         </div>
         <button type="submit">Submit</button>

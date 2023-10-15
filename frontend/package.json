@@ -15,9 +15,10 @@
     "react-d3-tree": "^3.6.1",
     "react-dom": "^18",
     "react-drag-drop-files": "^2.3.10",
-    "react-dropzone": "^14.2.3"
+    "react-dropzone": "^14.2.3",
     "reactflow": "^11.9.3",
-    "reagraph": "^4.14.1"
+    "reagraph": "^4.14.1",
+    "react-pdf": "^7.5.0"
   },
   "devDependencies": {
     "@types/node": "^20",
