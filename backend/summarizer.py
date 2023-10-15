@@ -2,7 +2,8 @@ import aiohttp
 import asyncio
 import openai
 
-openai.api_key = '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'
+openai.api_key = '' 
+# open ai key above
 
 
 async def summarize(session, section, max_tokens=280, temp=0):
