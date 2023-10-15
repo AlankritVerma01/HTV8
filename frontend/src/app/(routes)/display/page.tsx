@@ -3,7 +3,7 @@ import MindMap from "../../components/MindMap";
 import { NodeData } from "../../types/mindmapTypes";
 
 // This has to be changed to fetch the data from the database
-import data from "../../data/data.json"; // Import the dummy data
+import data from "../../data/trial.json"; // Import the dummy data
 import test from "node:test";
 
 

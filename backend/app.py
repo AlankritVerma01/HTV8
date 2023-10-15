@@ -1,100 +1,60 @@
-# from flask import Flask, request, jsonify, make_response
-# # import GPT as gpt
-# import MongoFuncs as mf
-# from flask_cors import CORS
-
-# app = Flask(__name__)
-
-# # cors = CORS(app, resources={r"/question": {"origins": ["http://localhost:3000"]}})
-
-# if __name__ == "__main__":
-#   app.run(debug=True)
-
-# @app.route('/')
-# def base():
-#    return jsonify({"message": "Hello World"})
-
-# @app.route('/upload', methods=['POST'])
-# def sendPdf():
-#   if request.method == 'POST':
-#     if 'file' not in request.files:
-#         return jsonify({})
-
-#     file = request.files['file']
-
-#   if file.filename == '':
-#     return jsonify({})
-  
-#   if file:
-#     db = mf.DBQuery()
-#     result_json = jsonify({})
-#     nodeList = gpt.main(file)
-#     first_id = list(nodeList[0].keys())[0]
-#     articleTitle = nodeList[0][first_id]["title"]
-#     articleText = nodeList[0][first_id]["text"]
-#     id = int(db.currentIndex()) + 1
-#     if len(db.queryMongo(id)) == 0:
-#       result_json = jsonify({"id": str(id), "title": articleTitle, "description": articleText, "nodes":nodeList})
-#     db.insertMongo(result_json)
-#     return result_json
-  
-# @app.route("/question", methods=["POST", "OPTIONS"])
-# # @cross_origin(headers=['Content-Type'])
-# def askGPT():
-#     if request.method == "OPTIONS": # CORS preflight
-#         return _build_cors_preflight_response()
-#     elif request.method == "POST": # The actual request following the preflight
-#         return _corsify_actual_response(jsonify({"name": "Murphy Lee"}))
-#     else:
-#         raise RuntimeError("Weird - don't know how to handle method {}".format(request.method))
-
-# # @app.route('/question', methods=['OPTIONS'])
-# # def handle_options():
-# #     response = jsonify({'message': 'Preflight request OK'})
-# #     response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
-# #     response.headers.add('Access-Control-Allow-Methods', 'POST')
-# #     response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
-# #     return response
-
-# def _corsify_actual_response(response):
-#     response.headers.add("Access-Control-Allow-Origin", "*")
-#     return response
-
-# def _build_cors_preflight_response():
-#     response = make_response()
-#     response.headers.add("Access-Control-Allow-Origin", "*")
-#     response.headers.add("Access-Control-Allow-Headers", "*")
-#     response.headers.add("Access-Control-Allow-Methods", "*")
-#     return response
-    
-# from flask import Flask, jsonify
-
-# app = Flask(__name__)
-
-
-# @app.route('/')
-# def hello():
-#     return jsonify({"name": "Murphy Lee"})
-
 from flask import Flask, request, jsonify
+from flask_cors import CORS
+import MongoFuncs as mf
+import GPT as gpt
+import json
+from bson.json_util import dumps
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
-@app.route('/', methods=['GET', 'POST'])
-def hello():
-    return 'Hello, World!'
+
+# @app.route('/', methods=['GET', 'POST'])
+# def hello():
+#     return 'Hello, World!'
+
+# def colour_assigner():
+
 
 @app.route('/question', methods=['POST'])
 def askGPT():
-  if request.method == 'POST':
-    response = jsonify({"name": "Murphy Lee"})
-    return response
-  
+    if request.method == 'POST':
+        data = request.json
+        text_received = data['question']
+        return text_received
+
+
 @app.route('/upload', methods=['POST'])
 def upload():
-  if request.method == 'POST':
-    response = jsonify({"name": "Murphy Lee1"})
-    return response
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return jsonify({})
+
+        file = request.files['file']
+
+        if file.filename == '':
+            return jsonify({})
+
+        if file:
+            db = mf.DBQuery()
+            result_json = jsonify({})
+            nodeDict = gpt.main(file)
+            print(nodeDict)
+            print("---------------------------------------------------------------")
+            print(nodeDict.keys())
+            first_id = list(nodeDict.keys())[0]
+            articleTitle = nodeDict[first_id]["title"]
+            articleText = nodeDict[first_id]["text"]
+            id = int(db.currentIndex()) + 1
+            if len(db.queryMongo(id)) == 0:
+                result_json = jsonify(
+                    {"id": str(id), "title": articleTitle, "text": articleText, "nodes": nodeDict}).get_json()
+                db.insertMongo(result_json)
+                result_json = dumps(result_json)
+            with open("./frontend/src/app/data/trial.json", "w") as file:
+                file.write(result_json)
+    return {"Status": "Success"}
+
 
 if __name__ == "__main__":
-  app.run(debug=True)
+    app.run(debug=True)

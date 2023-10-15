@@ -1,9 +1,7 @@
-import aiohttp
-import asyncio
-import openai
+import os, aiohttp, asyncio, openai
+from dotenv import load_dotenv
 
-openai.api_key = '' 
-# open ai key above
+openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 
 async def summarize(session, section, max_tokens=280, temp=0):
@@ -38,14 +36,15 @@ async def summarize(session, section, max_tokens=280, temp=0):
             return None
 
 
-async def main():
-    sections = ['Hello this is biology', 'Hello this is chemistry',
-                'hello this is computer science and i would like to talk about ai']   # List of sections to be summarized
+async def main(sections):
+    # sections = ['Hello this is biology', 'Hello this is chemistry', 'hello this is computer science and i would
+    # like to talk about ai']   # List of sections to be summarized
     async with aiohttp.ClientSession() as session:
         summaries = await asyncio.gather(*(summarize(session, section) for section in sections))
-        for i, summary in enumerate(summaries):
-            print(f'Summary {i + 1}:\n{summary}\n')
+        # for i, summary in enumerate(summaries):
+        #     print(f'Summary {i + 1}:\n{summary}\n')
+    return summaries
 
 # Run the main function
-if __name__ == '__main__':
-    asyncio.run(main())
+# if __name__ == '__main__':
+#     asyncio.run(main())

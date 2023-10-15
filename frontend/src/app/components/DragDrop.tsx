@@ -9,9 +9,10 @@ const DragDrop = () => {
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const formData = new FormData(event.currentTarget);
+    const formData = new FormData();
+    formData.append("file", file as File);
     try {
-      const response = await axios.post("/api/submit", formData, {
+      const response = await axios.post("http://127.0.0.1:5000/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

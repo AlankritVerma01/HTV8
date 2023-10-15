@@ -14,7 +14,7 @@ type MindMapProps = {
   data: {
     [key: string]: {
       title: string;
-      subtopics: Array<{ $numberInt: string }>;
+      children: Array<{ $numberInt: string }>;
       color: string;
     };
   };
@@ -22,6 +22,7 @@ type MindMapProps = {
 
 import { GraphCanvas } from "reagraph";
 const MindMap: React.FC<MindMapProps> = ({ data }) => {
+  
   const [question, setQuestion] = useState("");
   const handleButtonClick = () => {
     axios
@@ -43,12 +44,14 @@ const MindMap: React.FC<MindMapProps> = ({ data }) => {
       });
   };
 
-  const [collapsed, setCollapsed] = useState([]);
+  const initialCollapsed = Object.keys(data).filter(key => data[key].depth >= 1);
+  let [collapsed, setCollapsed] = useState(initialCollapsed);
   interface Node {
     id: string;
     label: string;
     color?: string;
     size?: number;
+    depth: number;
   }
 
   interface Link {
@@ -60,15 +63,17 @@ const MindMap: React.FC<MindMapProps> = ({ data }) => {
 
   const nodes: Node[] = [];
   const links: Link[] = [];
+  // Initialize collapsed state to include nodes with depth greater than 1
 
+  // const [collapsed, setCollapsed] = useState(initialCollapsed);
   for (let key in data) {
     nodes.push({
       id: key,
       label: data[key].title,
       fill: data[key].color,
-      size: 1,
+      size: data[key].size,
     });
-    for (let subtopic of data[key].subtopics) {
+    for (let subtopic of data[key].children) {
       links.push({
         id: `${key}->${subtopic}`,
         source: key,
@@ -142,6 +147,7 @@ const MindMap: React.FC<MindMapProps> = ({ data }) => {
           nodes={nodes}
           edges={links}
           onNodeClick={(node) => {
+            
             if (collapsed.includes(node.id)) {
               setCollapsed(collapsed.filter((id) => id !== node.id));
             } else {
