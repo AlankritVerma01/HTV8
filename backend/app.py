@@ -18,8 +18,10 @@ def askGPT():
         id = data['id']
         context = ""
         if len(current_nodes) != 0:
-          context = current_nodes[id]["text"]
-        return gpt.answer_question(context, question)
+            context = current_nodes[id]["text"]
+        answer = gpt.answer_question(context, question)
+        print(answer)
+        return answer
 
 
 @app.route('/upload', methods=['POST'])
