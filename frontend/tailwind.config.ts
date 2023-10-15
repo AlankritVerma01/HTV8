@@ -12,6 +12,7 @@ const config: Config = {
       pp: "#5333EC",
       tt: "#32D3D8",
       white: "#FFFFFF",
+      black: "#000000",
     },
     extend: {
       backgroundImage: {

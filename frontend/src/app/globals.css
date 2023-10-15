@@ -3,6 +3,13 @@
 @tailwind utilities;
 
 html {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
+}
+
+textarea {
+  resize: vertical;
+  overflow: auto; /* Adds scrollbars when resizing */
+  width: 300px; /* Set an initial width */
+  height: 100px; /* Set an initial height */
 }

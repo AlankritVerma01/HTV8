@@ -1,8 +1,12 @@
 "use client";
+require("dotenv").config();
 // components/MindMap.tsx
 
 import React, { useEffect, useRef, useState } from "react";
 import styles from "MindMap.module.css";
+import TextareaAutosize from "@mui/material/TextareaAutosize";
+import Button from "@mui/material/Button";
+import axios from "axios";
 
 // Definations -
 
@@ -18,6 +22,27 @@ type MindMapProps = {
 
 import { GraphCanvas } from "reagraph";
 const MindMap: React.FC<MindMapProps> = ({ data }) => {
+  const [question, setQuestion] = useState("");
+  const handleButtonClick = () => {
+    axios
+      .post(
+        `http://127.0.0.1:5000/question`,
+        { question: question },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "http://localhost:3000",
+          },
+        }
+      )
+      .then((response) => {
+        console.log("Response from Flask:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
   const [collapsed, setCollapsed] = useState([]);
   interface Node {
     id: string;
@@ -86,13 +111,26 @@ const MindMap: React.FC<MindMapProps> = ({ data }) => {
           <div className="w-full">
             <ul>
               {listpoints.map((point) => (
-                <li className="font-poppins text-xl relative z-1">&bull; {point}</li>
+                <li className="font-poppins text-xl relative z-1">
+                  &bull; {point}
+                </li>
               ))}
             </ul>
           </div>
         </div>
         <h3>Chat Assistant</h3>
-        
+        <TextareaAutosize
+          aria-label="empty textarea"
+          placeholder="Enter any questions"
+          minRows={1}
+          maxRows={5}
+          value={question} // Set the value of the textarea to the state
+          onChange={(e) => setQuestion(e.target.value)}
+          style={{ width: "100%", color: "black" }} // Set the width
+        />
+        <Button variant="contained" color="primary" onClick={handleButtonClick}>
+          Get Text
+        </Button>
       </div>
       <div
         style={{
