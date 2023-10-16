@@ -1,6 +1,11 @@
-import os, openai, PyPDF2, asyncio, aiohttp
-from dotenv import load_dotenv; load_dotenv()
 import summarizer
+import os
+import openai
+import PyPDF2
+import asyncio
+import aiohttp
+from dotenv import load_dotenv
+load_dotenv()
 
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 COLORS = ['#0d6c6c', '#139f9f', '#16c9c9', '#30e9e9', '#73f0f0']
@@ -73,7 +78,8 @@ def get_text_from_page(page, bottom, up):
         return visitor_body
 
     parts = []
-    page.extract_text(visitor_text=visitor_body_with_range(bottom=bottom, up=up))
+    page.extract_text(
+        visitor_text=visitor_body_with_range(bottom=bottom, up=up))
     return "".join(parts).strip()
 
 
@@ -112,11 +118,13 @@ def get_text_all_nodes(pdf_reader, all_nodes):
         page = pdf_reader.pages[prev_node.page]
 
         if prev_node.page == next_node.page:
-            text = get_text_from_page(page, bottom=next_node.top, up=prev_node.top).strip()
+            text = get_text_from_page(
+                page, bottom=next_node.top, up=prev_node.top).strip()
             prev_node.text = text[text.find('\n') + 1:].replace('\n', ' ')
 
         else:
-            text = get_text_from_page(page, bottom=42, up=prev_node.top).strip()
+            text = get_text_from_page(
+                page, bottom=42, up=prev_node.top).strip()
             text = text[text.find('\n') + 1:].replace('\n', ' ')
 
             curr_page_num = prev_node.page + 1
@@ -125,7 +133,8 @@ def get_text_all_nodes(pdf_reader, all_nodes):
                 text += pdf_reader.pages[curr_page_num].extract_text().replace('\n', ' ')
                 curr_page_num += 1
 
-            text += get_text_from_page(pdf_reader.pages[curr_page_num], bottom=next_node.top, up=750).replace('\n', ' ')
+            text += get_text_from_page(
+                pdf_reader.pages[curr_page_num], bottom=next_node.top, up=750).replace('\n', ' ')
             prev_node.text = text
 
         next_i, prev_i = next_i + 1, prev_i + 1
@@ -146,13 +155,15 @@ def get_text_all_nodes(pdf_reader, all_nodes):
 
 def get_title_root(pdf_reader):
     prompt = f"What is the title of this article?\n{pdf_reader.pages[0].extract_text()}\nTitle: "
-    response, _ = ask_chatgpt(prompt, history=[], system=None, new_chat=True, max_tokens=50, temp=0)
+    response, _ = ask_chatgpt(
+        prompt, history=[], system=None, new_chat=True, max_tokens=50, temp=0)
     return response.strip()
 
 
 def get_text_root(pdf_reader):
     prompt = f"What is the abstract of this article?\n{pdf_reader.pages[0].extract_text()}\nAbstract: "
-    response, _ = ask_chatgpt(prompt, history=[], system=None, new_chat=True, max_tokens=250, temp=0)
+    response, _ = ask_chatgpt(
+        prompt, history=[], system=None, new_chat=True, max_tokens=250, temp=0)
     return response.strip()
 
 
@@ -211,23 +222,25 @@ def answer_question(section, question, max_tokens=150, temp=0):
     system = f'Act as a professional scientist that reviews articles.'
     prompt = f'article: {section}.\nQuestion: {question}\nAnswer: '
 
-    history = [{"role": "system", "content": system}, {"role": "user", "content": prompt}]
+    history = [{"role": "system", "content": system},
+               {"role": "user", "content": prompt}]
 
     response = openai.ChatCompletion.create(
-      model='gpt-3.5-turbo',
-      messages=history,
-      temperature=temp,
-      max_tokens=max_tokens,
-      top_p=1,
-      frequency_penalty=0,
-      presence_penalty=0
+        model='gpt-3.5-turbo',
+        messages=history,
+        temperature=temp,
+        max_tokens=max_tokens,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0
     )
     return response['choices'][0]['message']['content']
 
 
 def main(opened_pdf):
     pdf_reader = PyPDF2.PdfReader(opened_pdf)
-    root = create_graph(pdf_reader, title=get_title_root(pdf_reader), page=pdf_reader.pages[0])
+    root = create_graph(pdf_reader, title=get_title_root(
+        pdf_reader), page=pdf_reader.pages[0])
     root.text = get_text_root(pdf_reader)
 
     all_nodes = []
@@ -242,10 +255,10 @@ def main(opened_pdf):
     # float2string(all_nodes)
 
     section_texts = [node.text for node in all_nodes]
-    summarized_texts = asyncio.run(summarizer.main(section_texts[1:]))
+    summarized_texts = asyncio.run(summarizer.main(section_texts))
 
     for i, each_summary in enumerate(summarized_texts):
-        all_nodes[i+1].text = each_summary
+        all_nodes[i].text = each_summary
 
     get_json_output(json_output, root)
     return json_output

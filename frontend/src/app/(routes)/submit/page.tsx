@@ -14,7 +14,7 @@ export default function Submit() {
       />
       ;
       <nav className="flex px-8 py-[0.9rem] pb-[0.8rem] items-center justify-between text-white relative border-white border-b-2">
-        <h2 className="font-lato font-bold text-2xl">Paper:Vision</h2>
+        <Link href={'/'} className="font-lato font-bold text-2xl hover:underline ease-in duration-100">Paper:Vision</Link>
       </nav>
       <DragDrop />
     </main>

@@ -21,7 +21,7 @@ def askGPT():
             context = current_nodes[id]["text"]
         answer = gpt.answer_question(context, question)
         print(answer)
-        return answer
+        return jsonify({"answer": answer})
 
 
 @app.route('/upload', methods=['POST'])

@@ -2,10 +2,13 @@
 import React, { useCallback, useState, FormEvent } from "react";
 import axios from "axios";
 import { useDropzone } from "react-dropzone";
+import LoadingSpinner from "./LoadingSpinner";
 
 const DragDrop = () => {
   // form submit function
+  const [loading, setLoading] = useState(false);
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
+    setLoading(true);
     event.preventDefault();
 
     const formData = new FormData();
@@ -37,6 +40,12 @@ const DragDrop = () => {
   }, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
+  if (loading) {
+    return (
+      <LoadingSpinner />
+    )
+  }
+
   return (
     <main className="w-full h-[80vh] flex flex-col items-center mt-8 relative text-white">
       <form
@@ -45,7 +54,7 @@ const DragDrop = () => {
       >
         <div
           {...getRootProps()}
-          className="border-2 w-[40%] h-full flex justify-center items-center"
+          className="border-2 w-[40%] h-full flex justify-center items-center hover:cursor-pointer ease-in duration-100 hover:border-tt"
         >
           <input {...getInputProps()} />
           {isDragActive ? (
@@ -78,7 +87,7 @@ const DragDrop = () => {
         <div className="w-[40%] flex justify-end">
           <button
             type="submit"
-            className="font-poppins font-medium border-[0.17rem] border-tt text-tt rounded-full py-2 px-14 mt-4"
+            className="font-poppins font-medium border-[0.17rem] border-tt text-tt rounded-full py-2 px-14 mt-4 hover:border-pp ease-in hover:text-pp"
           >
             Submit
           </button>

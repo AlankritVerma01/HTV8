@@ -7,6 +7,7 @@ import styles from "MindMap.module.css";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import Button from "@mui/material/Button";
 import axios from "axios";
+import Link from "next/link";
 
 // Definations -
 
@@ -25,8 +26,9 @@ import { TextField } from "@mui/material";
 const MindMap: React.FC<MindMapProps> = ({ data }) => {
   const [question, setQuestion] = useState("");
   const [qDisplay, setQDisplay] = useState("");
+  const [summaryHeader, setSummaryHeader] = useState("Summary:");
   const [answer, setAnswer] = useState(
-    "Your answer will appear here after you ask questions in the chatbox..."
+    "Your answer will appear here..."
   );
   const [isTypingEffect, setIsTypingEffect] = useState(false);
 
@@ -118,46 +120,65 @@ const MindMap: React.FC<MindMapProps> = ({ data }) => {
 
 
   return (
-    <div className="absolute top-0 bottom-0 left-0 right-0 w-[55%]">
+    <div className="absolute top-0 bottom-0 left-0 right-0 w-[58%]">
       <div
         className="absolute z-9 p-8 flex flex-col items-center w-full"
         style={{
           zIndex: 9,
           position: "fixed",
           height: "100vh",
-          width: "45rem",
+          width: "40rem",
           right: 0,
-          background: "rgba(0, 0, 0, .5)",
+          background: "rgb(67, 78, 103)",
           color: "white",
         }}
       >
         <div className="w-full mb-10">
-          <h3 className="font-poppins font-bold text-3xl mb-4">Summary:</h3>
-          <div className="w-full h-72 overflow-y-auto border-white border-2 rounded-md p-4">
-            <ul>
+          <div className="font-poppins w-full font-bold mb-[1rem] flex justify-between items-center">
+            <h3 className="text-3xl">{summaryHeader}</h3>
+            <Link href={"/"} className="border-white border-2 px-8 py-2 rounded-xl hover:border-tt ease-in duration-100 hover:text-tt">Home</Link>
+          </div>
+          <div className="w-full h-[24rem] overflow-y-auto border-white border-2 rounded-xl p-4">
+            {activeId ? (
+              <ul>
               {listpoints.map((point) => (
-                <li className="font-poppins text-lg relative z-1">
-                  &bull; {point}
-                </li>
+                <div>
+                  <li className="font-poppins relative z-1">
+                    &bull; {point}
+                  </li>
+                  <br />
+                </div>
               ))}
             </ul>
+            )
+           : (
+            <p className="font-poppins relative z-1">
+              Click on a node...
+            </p>
+           )
+
+      }
+            
           </div>
         </div>
         <div className="w-full">
-          <h3 className="font-poppins font-bold text-3xl">Chat Assistant</h3>
-          <div className="w-full h-56 mb-4 border-white border-2 rounded-md p-4 font-poppins">
+          <h3 className="font-poppins font-bold text-3xl mb-[1rem]">Chat Assistant</h3>
+          <div className="w-full h-[9rem] mb-4 border-white border-2 rounded-xl p-4 font-poppins overflow-y-auto">
             {answer}
           </div>
-          <div className="w-full">
+          <div className="w-full border-2">
             <TextField
               type="text"
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
               onKeyDown={handleKeyPress}
-              className="font-poppins w-full h-[2.3rem] p-2 rounded-lg text-white bg-transparent"
+              placeholder="Enter your question here..."
+              className="font-poppins w-full p-2 rounded-lg text-white border-white rounded-md bg-transparent"
+              sx={{ input: { color: 'white' },
+              root: { borderRadius: '12px' }  }}
             />
           </div>
-          <p className="font-poppins mt-6">{qDisplay}</p>
+          <p className="font-poppins mt-2">{qDisplay}</p>
         </div>
       </div>
       <div
@@ -171,10 +192,12 @@ const MindMap: React.FC<MindMapProps> = ({ data }) => {
           edges={links}
           onNodeClick={(node) => {
             setActiveId(node.id);
+            setSummaryHeader(node.label);
             if (collapsed.includes(node.id)) {
               setCollapsed(collapsed.filter((id) => id !== node.id));
               if (node.text) {
                 const newPoints = node.text.split('\n-');
+                newPoints[0] = newPoints[0].slice(1);
                 setListpoints(newPoints);
               }
             } else {
